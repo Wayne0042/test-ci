@@ -60,6 +60,11 @@ jobs:
         app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
     steps:
       - run: echo "execute test ${{ matrix.app }}"
+      - run: |
+          if [[ "${{ matrix.app }}" == "frontend" ]]; then
+            echo "simulate ${{ matrix.app }} ci fail"
+            exit 1
+          fi
 
   build:
     runs-on: ubuntu-latest
