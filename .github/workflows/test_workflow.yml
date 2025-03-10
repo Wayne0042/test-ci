@@ -1,0 +1,51 @@
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on: [push]
+jobs:
+  install_dependency:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "execute install_dependency"
+
+  format:
+    runs-on: ubuntu-latest
+    needs: [install_dependency]
+    steps:
+      - run: echo "execute format"
+
+  lint:
+    runs-on: ubuntu-latest
+    needs: [install_dependency]
+    steps:
+      - run: echo "execute lint"
+
+  type:
+    runs-on: ubuntu-latest
+    needs: [install_dependency]
+    steps:
+      - run: echo "execute type"
+
+  test:
+    runs-on: ubuntu-latest
+    needs: [lint, format, type]
+    steps:
+      - run: echo "execute test"
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [test]
+    steps:
+      - run: echo "execute build docker"
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - run: echo "execute deploy"
+
+  notify:
+    runs-on: ubuntu-latest
+    needs: [install_dependency, format, lint, type, test, build, deploy]
+    if: always()
+    steps:
+      - run: echo "execute deploy"
