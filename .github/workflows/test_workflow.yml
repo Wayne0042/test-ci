@@ -23,6 +23,8 @@ jobs:
       - uses: ./.github/actions/install_dependency
         with:
           app: ${{ matrix.app }}
+          variable: ${{ vars.TEST_VARIABLE }}
+          secret: ${{ secrets.TEST_SECRET }}
       - run: echo "execute install_dependency ${{ matrix.app }}"
 
   format:
