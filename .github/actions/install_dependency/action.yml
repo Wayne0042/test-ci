@@ -1,0 +1,20 @@
+name: 'install dependency'
+description: 'install dependency description'
+inputs:
+  app:  # id of input
+    description: 'app description'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: fronend
+      if: ${{ inputs.app == 'frontend' }}
+      run: echo "install frontend dependency"
+      shell: bash
+      # env:
+      #   INPUT_WHO_TO_GREET: ${{ inputs.who-to-greet }}
+
+    - name: backend
+      if: ${{ inputs.app == 'backend' }}
+      run: echo "install backend dependency"
+      shell: bash

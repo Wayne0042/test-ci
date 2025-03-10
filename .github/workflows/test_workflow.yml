@@ -19,6 +19,10 @@ jobs:
       matrix:
         app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
     steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/install_dependency
+        with:
+          app: ${{ matrix.app }}
       - run: echo "execute install_dependency ${{ matrix.app }}"
 
   format:
