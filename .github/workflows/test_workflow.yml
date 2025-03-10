@@ -8,7 +8,8 @@ jobs:
       matrix: ${{ steps.generate_matrix_config.outputs.apps }}
     steps:
       - id: generate_matrix_config
-        run: echo 'apps=["frontend", "backend"]' >> "$GITHUB_OUTPUT"
+        # run: echo 'apps=["frontend", "backend"]' >> "$GITHUB_OUTPUT"
+        run: echo 'apps=["backend"]' >> "$GITHUB_OUTPUT"
       - run: echo "generate matrix config"
 
   install_dependency:
@@ -60,11 +61,11 @@ jobs:
         app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
     steps:
       - run: echo "execute test ${{ matrix.app }}"
-      - run: |
-          if [[ "${{ matrix.app }}" == "frontend" ]]; then
-            echo "simulate ${{ matrix.app }} ci fail"
-            exit 1
-          fi
+      # - run: |
+      #     if [[ "${{ matrix.app }}" == "frontend" ]]; then
+      #       echo "simulate ${{ matrix.app }} ci fail"
+      #       exit 1
+      #     fi
 
   build:
     runs-on: ubuntu-latest
