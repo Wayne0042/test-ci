@@ -8,7 +8,7 @@ jobs:
       matrix: ${{ steps.generate_matrix_config.outputs.apps }}
     steps:
       - id: generate_matrix_config
-        run: echo 'apps=["frontend", "backend"]' >> "$GITHUB_OUTPUT"
+        run: echo 'apps=["ai_bu", "jutor_job"]' >> "$GITHUB_OUTPUT"
       - run: echo "generate matrix config"
 
   install_dependency:
@@ -20,7 +20,7 @@ jobs:
         app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v4
-      - run: node ./.github/cli/index.js hello wayne
+      # - run: node ./.github/cli/index.js format 
       - run: echo "execute install_dependency ${{ matrix.app }}"
 
   format:
@@ -32,7 +32,7 @@ jobs:
         app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v4
-      - run: node ./.github/cli/index.js goodbye
+      - run: node ./.github/cli/index.js format ${{ matrix.app }}
       - run: echo "execute format ${{ matrix.app }}"
 
   lint:
