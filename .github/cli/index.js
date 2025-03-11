@@ -1,144 +1,16 @@
-import { spawn } from 'child_process';
 import { convertEnum } from './convert.mjs';
-
-const COMMAND = {
-    format: 'format',
-    lint: 'lint',
-    type: 'type',
-    unit_test: 'unit_test',
-    integration_test: 'integration_test',
-    build: 'build',
-    deploy: 'deploy',
-};
-
-const CONTEXT = {
-    ai_bu: 'ai_bu',
-    jutor_job: 'jutor_job',
-};
+import { COMMAND, CONTEXT } from './constant.mjs';
+import { format } from './format.mjs';
+import { lint } from './lint.mjs';
+import { type } from './type.mjs';
+import { unitTest } from './unit-test.mjs';
+import { integrationTest } from './integration-test.mjs';
+import { build } from './build.mjs';
+import { deploy } from './deploy.mjs';
 
 function exitWithError(message) {
     console.log(`${message}, exit`);
     process.exit(1);
-};
-
-function executeSubProcess(command, args) {
-    const subProcess = spawn(command, args);
-
-    subProcess.stdout.on("data", (data) => {
-        console.log(`stdout: ${data}`);
-    });
-
-    subProcess.stderr.on('data', (data) => {
-        console.error(`stderr: ${data}`);
-      });
-
-    subProcess.on('close', (code) => {
-        if (code === 0) {
-            console.log("command succeeded");
-        } else {
-            console.error(`failed with code ${code}`);
-        }
-    });
-}
-
-function format(context) {
-    switch (context) {
-        case CONTEXT.ai_bu:
-            executeSubProcess("echo", ["execute ai_bu format"]);
-            break;
-
-        case CONTEXT.jutor_job:
-            console.log("execute jutor_job format");
-            break;
-    
-        default:
-            exitWithError("invalid context");
-            break;
-    }
-};
-
-function lint(context) {
-    switch (context) {
-        case CONTEXT.ai_bu:
-            break;
-
-        case CONTEXT.jutor_job:
-            break;
-    
-        default:
-            exitWithError("invalid context");
-            break;
-    }
-};
-
-function type(context) {
-    switch (context) {
-        case CONTEXT.ai_bu:
-            break;
-
-        case CONTEXT.jutor_job:
-            break;
-    
-        default:
-            exitWithError("invalid context");
-            break;
-    }
-};
-
-function unitTest(context) {
-    switch (context) {
-        case CONTEXT.ai_bu:
-            break;
-
-        case CONTEXT.jutor_job:
-            break;
-    
-        default:
-            exitWithError("invalid context");
-            break;
-    }
-};
-
-function integrationTest(context) {
-    switch (context) {
-        case CONTEXT.ai_bu:
-            break;
-
-        case CONTEXT.jutor_job:
-            break;
-    
-        default:
-            exitWithError("invalid context");
-            break;
-    }
-};
-
-function build(context) {
-    switch (context) {
-        case CONTEXT.ai_bu:
-            break;
-
-        case CONTEXT.jutor_job:
-            break;
-    
-        default:
-            exitWithError("invalid context");
-            break;
-    }
-};
-
-function deploy(context) {
-    switch (context) {
-        case CONTEXT.ai_bu:
-            break;
-
-        case CONTEXT.jutor_job:
-            break;
-    
-        default:
-            exitWithError("invalid context");
-            break;
-    }
 };
 
 function executeCommand(command, context) {
