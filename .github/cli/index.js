@@ -1,4 +1,5 @@
 import { spawn } from 'child_process';
+import { convertEnum } from './convert.mjs';
 
 const COMMAND = {
     format: 'format',
@@ -13,10 +14,6 @@ const COMMAND = {
 const CONTEXT = {
     ai_bu: 'ai_bu',
     jutor_job: 'jutor_job',
-};
-
-function convertEnum(type, value) {
-    return type[value] || null;
 };
 
 function exitWithError(message) {
