@@ -21,28 +21,30 @@ function exitWithError(message) {
     process.exit(1);
 };
 
+function executeSubProcess(command, args) {
+    const subProcess = spawn(command, args);
+
+    subProcess.stdout.on("data", (data) => {
+        console.log(`stdout: ${data}`);
+    });
+
+    subProcess.stderr.on('data', (data) => {
+        console.error(`stderr: ${data}`);
+      });
+
+    subProcess.on('close', (code) => {
+        if (code === 0) {
+            console.log("command succeeded");
+        } else {
+            console.error(`failed with code ${code}`);
+        }
+    });
+}
+
 function format(context) {
     switch (context) {
         case CONTEXT.ai_bu:
-            const subCommand = "echo";
-            const subArgs = ["execute ai_bu format"];
-            const subProcess = spawn(subCommand, subArgs);
-            subProcess.stdout.on("data", (data) => {
-                console.log(`stdout: ${data}`);
-            });
-
-            subProcess.stderr.on('data', (data) => {
-                console.error(`stderr: ${data}`);
-              });
-
-            subProcess.on('close', (code) => {
-                if (code === 0) {
-                    console.log('format succeeded');
-                } else {
-                    console.error(`format failed with code ${code}`);
-                }
-            });
-            // console.log("execute ai_bu format");
+            executeSubProcess("echo", ["execute ai_bu format"]);
             break;
 
         case CONTEXT.jutor_job:
