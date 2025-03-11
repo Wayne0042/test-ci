@@ -2,17 +2,17 @@ import { CONTEXT } from "./constant.mjs";
 import { executeSubProcess } from "./execute-subprocess.mjs";
 
 function type(context) {
-    switch (context) {
-        case CONTEXT.ai_bu:
-            break;
+  switch (context) {
+    case CONTEXT.ai_bu:
+      break;
 
-        case CONTEXT.jutor_job:
-            break;
-    
-        default:
-            exitWithError("invalid context");
-            break;
-    }
-};
+    case CONTEXT.jutor_job:
+      break;
 
-export { type }
+    default:
+      exitWithError("invalid context");
+      break;
+  }
+}
+
+export { type };
