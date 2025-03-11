@@ -2,6 +2,7 @@ import { COMMAND, CONTEXT } from "./config.mjs";
 import { exitWithError } from "./common/exit-with-error.mjs";
 import { AiBuHandler } from "./handler/ai-bu-handler.mjs";
 import { JutorJobHandler } from "./handler/jutor-job-handler.mjs";
+import { getMatchedContext } from "./common/get-matched-context.mjs";
 
 function convertEnum(type, value) {
   return type[value] || null;
@@ -21,8 +22,12 @@ function generateHandler(context) {
   }
 }
 
-function executeCommand(handler, command) {
+async function executeCommand(handler, command) {
   switch (command) {
+    case COMMAND.get_matched_context:
+      await getMatchedContext();
+      break
+
     case COMMAND.format:
       handler.format();
       break;
@@ -57,7 +62,7 @@ function executeCommand(handler, command) {
   }
 }
 
-function main() {
+async function main() {
   console.log(`Node.js version: ${process.version}`);
 
   const args = process.argv.slice(2);
@@ -79,7 +84,7 @@ function main() {
     exitWithError("invalid command");
   }
 
-  executeCommand(handler, command);
+  await executeCommand(handler, command);
 }
 
 main();
