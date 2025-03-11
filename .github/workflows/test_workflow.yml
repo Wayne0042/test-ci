@@ -20,7 +20,6 @@ jobs:
         app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v4
-      # - run: node ./.github/cli/index.js format 
       - run: echo "execute install_dependency ${{ matrix.app }}"
 
   format:
@@ -32,7 +31,7 @@ jobs:
         app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v4
-      - run: node ./.github/cli/index.js format ${{ matrix.app }}
+      - run: node ./.github/cli/index.js ${{ matrix.app }} format
       - run: echo "execute format ${{ matrix.app }}"
 
   lint:

@@ -1,42 +1,54 @@
-import { convertEnum } from "./convert.mjs";
-import { COMMAND, CONTEXT } from "./constant.mjs";
-import { format } from "./format.mjs";
-import { lint } from "./lint.mjs";
-import { type } from "./type.mjs";
-import { unitTest } from "./unit-test.mjs";
-import { integrationTest } from "./integration-test.mjs";
-import { build } from "./build.mjs";
-import { deploy } from "./deploy.mjs";
-import { exitWithError } from "./exit-with-error.mjs";
+import { COMMAND, CONTEXT } from "./config.mjs";
+import { exitWithError } from "./common/exit-with-error.mjs";
+import { AiBuHandler } from "./handler/ai-bu-handler.mjs";
+import { JutorJobHandler } from "./handler/jutor-job-handler.mjs";
 
-function executeCommand(command, context) {
+function convertEnum(type, value) {
+  return type[value] || null;
+}
+
+function generateHandler(context) {
+  switch (context) {
+    case CONTEXT.ai_bu:
+      return new AiBuHandler();
+
+    case CONTEXT.jutor_job:
+      return new JutorJobHandler();
+
+    default:
+      exitWithError("invalid context");
+      break;
+  }
+}
+
+function executeCommand(handler, command) {
   switch (command) {
     case COMMAND.format:
-      format(context);
+      handler.format();
       break;
 
     case COMMAND.lint:
-      lint(context);
+      handler.lint();
       break;
 
     case COMMAND.type:
-      type(context);
+      handler.type();
       break;
 
     case COMMAND.unit_test:
-      unitTest(context);
+      handler.unitTest();
       break;
 
     case COMMAND.integration_test:
-      integrationTest(context);
+      handler.integrationTest();
       break;
 
     case COMMAND.build:
-      build(context);
+      handler.build();
       break;
 
     case COMMAND.deploy:
-      deploy(context);
+      handler.deploy();
       break;
 
     default:
@@ -52,20 +64,22 @@ function main() {
   console.log(`args: ${args}`);
 
   if (args.length < 2) {
-    exitWithError(`args should greater than 2, args:${args}`);
+    exitWithError(`args length should greater than 2, args: ${args}`);
   }
 
-  const command = convertEnum(COMMAND, args[0]);
-  if (!command) {
-    exitWithError("invalid command");
-  }
-
-  const context = convertEnum(CONTEXT, args[1]);
+  const context = convertEnum(CONTEXT, args[0]);
   if (!context) {
     exitWithError("invalid context");
   }
 
-  executeCommand(command, context);
+  const handler = generateHandler(context);
+
+  const command = convertEnum(COMMAND, args[1]);
+  if (!command) {
+    exitWithError("invalid command");
+  }
+
+  executeCommand(handler, command);
 }
 
 main();
