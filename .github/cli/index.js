@@ -1,4 +1,4 @@
-// import { spawn } from 'child_process';
+import { spawn } from 'child_process';
 
 const COMMAND = {
     format: 'format',
@@ -27,7 +27,25 @@ function exitWithError(message) {
 function format(context) {
     switch (context) {
         case CONTEXT.ai_bu:
-            console.log("execute ai_bu format");
+            const subCommand = "echo";
+            const subArgs = ["execute ai_bu format"];
+            const subProcess = spawn(subCommand, subArgs);
+            subProcess.stdout.on("data", (data) => {
+                console.log(`stdout: ${data}`);
+            });
+
+            subProcess.stderr.on('data', (data) => {
+                console.error(`stderr: ${data}`);
+              });
+
+            subProcess.on('close', (code) => {
+                if (code === 0) {
+                    console.log('format succeeded');
+                } else {
+                    console.error(`format failed with code ${code}`);
+                }
+            });
+            // console.log("execute ai_bu format");
             break;
 
         case CONTEXT.jutor_job:
