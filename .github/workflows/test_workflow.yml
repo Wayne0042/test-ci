@@ -20,11 +20,12 @@ jobs:
         app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/install_dependency
-        with:
-          app: ${{ matrix.app }}
-          variable: ${{ vars.TEST_VARIABLE }}
-          secret: ${{ secrets.TEST_SECRET }}
+      # - uses: ./.github/actions/install_dependency
+      #   with:
+      #     app: ${{ matrix.app }}
+      #     variable: ${{ vars.TEST_VARIABLE }}
+      #     secret: ${{ secrets.TEST_SECRET }}
+      - run: node ./.github/cli/index.js hello wayne
       - run: echo "execute install_dependency ${{ matrix.app }}"
 
   format:
@@ -35,6 +36,8 @@ jobs:
       matrix:
         app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
     steps:
+      - uses: actions/checkout@v4
+      - run: node ./.github/cli/index.js goodbye
       - run: echo "execute format ${{ matrix.app }}"
 
   lint:
