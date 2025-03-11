@@ -7,11 +7,7 @@ import { unitTest } from "./unit-test.mjs";
 import { integrationTest } from "./integration-test.mjs";
 import { build } from "./build.mjs";
 import { deploy } from "./deploy.mjs";
-
-function exitWithError(message) {
-  console.log(`${message}, exit`);
-  process.exit(1);
-}
+import { exitWithError } from "./exit-with-error.mjs";
 
 function executeCommand(command, context) {
   switch (command) {

@@ -1,5 +1,6 @@
 import { CONTEXT } from "./constant.mjs";
-import { executeSubProcess } from "./execute-subprocess.mjs";
+// import { executeSubProcess } from "./execute-subprocess.mjs";
+import { exitWithError } from "./exit-with-error.mjs";
 
 function integrationTest(context) {
   switch (context) {
