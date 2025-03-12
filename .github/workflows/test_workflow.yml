@@ -5,10 +5,11 @@ jobs:
   generate_matrix_config:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.generate_matrix_config.outputs.apps }}
+      matrix: ${{ steps.generate_matrix_config.outputs.matrix_config }}
     steps:
       - id: generate_matrix_config
-        run: echo 'apps=["ai_bu", "jutor_job"]' >> "$GITHUB_OUTPUT"
+        run: |
+          echo 'matrix_config=[{"context": "ai_bu", "only_deploy": true},{"context": "jutor_job", "only_deploy": false}]' >> "$GITHUB_OUTPUT"
       - run: echo "generate matrix config"
 
   install_dependency:
@@ -17,88 +18,89 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
+        matrix_config: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v4
-      - run: echo "execute install_dependency ${{ matrix.app }}"
+      - run: echo "execute install_dependency ${{ matrix.matrix_config.context }}"
+      - run: echo "execute install_dependency ${{ matrix.matrix_config.only_deploy }}"
 
-  format:
-    runs-on: ubuntu-latest
-    needs: [generate_matrix_config, install_dependency]
-    strategy:
-      fail-fast: false
-      matrix:
-        app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
-    steps:
-      - uses: actions/checkout@v4
-      - run: node ./.github/cli/index.js ${{ matrix.app }} format
-      - run: echo "execute format ${{ matrix.app }}"
+  # format:
+  #   runs-on: ubuntu-latest
+  #   needs: [generate_matrix_config, install_dependency]
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - run: node ./.github/cli/index.js ${{ matrix.app }} format
+  #     - run: echo "execute format ${{ matrix.app }}"
 
-  lint:
-    runs-on: ubuntu-latest
-    needs: [generate_matrix_config, install_dependency]
-    strategy:
-      fail-fast: false
-      matrix:
-        app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
-    steps:
-      - uses: actions/checkout@v4
-      - run: echo "execute lint ${{ matrix.app }}"
+  # lint:
+  #   runs-on: ubuntu-latest
+  #   needs: [generate_matrix_config, install_dependency]
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - run: echo "execute lint ${{ matrix.app }}"
 
-  type:
-    runs-on: ubuntu-latest
-    needs: [generate_matrix_config, install_dependency]
-    strategy:
-      fail-fast: false
-      matrix:
-        app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
-    steps:
-      - uses: actions/checkout@v4
-      - run: echo "execute type ${{ matrix.app }}"
+  # type:
+  #   runs-on: ubuntu-latest
+  #   needs: [generate_matrix_config, install_dependency]
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - run: echo "execute type ${{ matrix.app }}"
 
-  unit_test:
-    runs-on: ubuntu-latest
-    needs: [generate_matrix_config, install_dependency]
-    strategy:
-      fail-fast: false
-      matrix:
-        app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
-    steps:
-      - uses: actions/checkout@v4
-      - run: echo "execute test ${{ matrix.app }}"
+  # unit_test:
+  #   runs-on: ubuntu-latest
+  #   needs: [generate_matrix_config, install_dependency]
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - run: echo "execute test ${{ matrix.app }}"
 
-  integration_test:
-    runs-on: ubuntu-latest
-    needs: [generate_matrix_config, lint, format, type, unit_test]
-    strategy:
-      fail-fast: false
-      matrix:
-        app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
-    steps:
-      - uses: actions/checkout@v4
-      - run: echo "execute test ${{ matrix.app }}"
+  # integration_test:
+  #   runs-on: ubuntu-latest
+  #   needs: [generate_matrix_config, lint, format, type, unit_test]
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - run: echo "execute test ${{ matrix.app }}"
 
-  build:
-    runs-on: ubuntu-latest
-    needs: [generate_matrix_config, integration_test]
-    strategy:
-      fail-fast: false
-      matrix:
-        app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
-    steps:
-      - uses: actions/checkout@v4
-      - run: echo "execute build docker ${{ matrix.app }}"
+  # build:
+  #   runs-on: ubuntu-latest
+  #   needs: [generate_matrix_config, integration_test]
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - run: echo "execute build docker ${{ matrix.app }}"
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: [generate_matrix_config, build]
-    strategy:
-      fail-fast: false
-      matrix:
-        app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
-    steps:
-      - uses: actions/checkout@v4
-      - run: echo "execute deploy ${{ matrix.app }}"
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: [generate_matrix_config, build]
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - run: echo "execute deploy ${{ matrix.app }}"
 
   # notify:
   #   runs-on: ubuntu-latest
