@@ -13,4 +13,4 @@ runs:
       uses: google-github-actions/auth@v2
       with:
         project_id: river-surf-289011
-        credentials_json: inputs.gcp_key
+        credentials_json: "${{ inputs.gcp_key }}"
