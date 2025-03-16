@@ -3,132 +3,13 @@ run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
 
 jobs:
-  generate_matrix_config:
+  build:
     runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.generate_matrix_config.outputs.matrix_config }}
     steps:
-      - id: generate_matrix_config
-        run: |
-          echo 'matrix_config=[{"context": "ai_bu", "check": false, "deploy": true},{"context": "jutor_job", "check": true, "deploy": true}]' >> "$GITHUB_OUTPUT"
-      - run: echo "generate matrix config"
+      - uses: actions/checkout@v4
 
-  call_dev_workflow:
-    needs: [generate_matrix_config]
-    strategy:
-      fail-fast: false
-      matrix:
-        matrix_config: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
-    uses: ./.github/workflows/dev_workflow.yml
-    with:
-      context: ${{ matrix.matrix_config.context }}
-      check: ${{ matrix.matrix_config.check }}
-      deploy: ${{ matrix.matrix_config.deploy }}
-
-  # install_dependency:
-  #   runs-on: ubuntu-latest
-  #   needs: [generate_matrix_config]
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       matrix_config: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - run: echo "execute install_dependency ${{ matrix.matrix_config.context }}"
-  #     - run: echo "execute install_dependency ${{ matrix.matrix_config.only_deploy }}"
-
-  # format:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       matrix_config: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
-  #   needs: [generate_matrix_config]
-  #   if: matrix.matrix_config.only_deploy
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - run: echo "execute ${{ matrix.matrix_config.context }} format"
-
-  # build:
-  #   runs-on: ubuntu-latest
-  #   needs: [generate_matrix_config, format]
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       matrix_config: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - run: echo "execute ${{ matrix.matrix_config.context }} build"
-
-  # lint:
-  #   runs-on: ubuntu-latest
-  #   needs: [generate_matrix_config, install_dependency]
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - run: echo "execute lint ${{ matrix.app }}"
-
-  # type:
-  #   runs-on: ubuntu-latest
-  #   needs: [generate_matrix_config, install_dependency]
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - run: echo "execute type ${{ matrix.app }}"
-
-  # unit_test:
-  #   runs-on: ubuntu-latest
-  #   needs: [generate_matrix_config, install_dependency]
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - run: echo "execute test ${{ matrix.app }}"
-
-  # integration_test:
-  #   runs-on: ubuntu-latest
-  #   needs: [generate_matrix_config, lint, format, type, unit_test]
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - run: echo "execute test ${{ matrix.app }}"
-
-  # build:
-  #   runs-on: ubuntu-latest
-  #   needs: [generate_matrix_config, integration_test]
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - run: echo "execute build docker ${{ matrix.app }}"
-
-  # deploy:
-  #   runs-on: ubuntu-latest
-  #   needs: [generate_matrix_config, build]
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       app: ${{ fromJson(needs.generate_matrix_config.outputs.matrix) }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - run: echo "execute deploy ${{ matrix.app }}"
-
-  # notify:
-  #   runs-on: ubuntu-latest
-  #   needs: [generate_matrix_config, install_dependency, format, lint, type, unit_test, integration_test, build, deploy]
-  #   if: always()
-  #   steps:
-  #     - run: echo "execute deploy"
+      - name: Set up Google Cloud Auth
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: river-surf-289011
+          credentials_json: ${{ secrets.TEST_GCP_KEY }}
