@@ -8,8 +8,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # - name: Set up Google Cloud Auth
+      #   uses: google-github-actions/auth@v2
+      #   with:
+      #     project_id: river-surf-289011
+      #     credentials_json: ${{ secrets.TEST_GCP_KEY }}
+
       - name: Set up Google Cloud Auth
-        uses: google-github-actions/auth@v2
+        uses: ./.github/actions/build_env
         with:
-          project_id: river-surf-289011
-          credentials_json: ${{ secrets.TEST_GCP_KEY }}
+          gcp_key: ${{ secrets.TEST_GCP_KEY }}

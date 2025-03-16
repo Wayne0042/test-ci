@@ -1,0 +1,16 @@
+name: "setup google cloud auth"
+description: "setup google cloud auth"
+
+inputs:
+  gcp_key:
+    description: "gcp_key"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Google Cloud Auth
+      uses: google-github-actions/auth@v2
+      with:
+        project_id: river-surf-289011
+        credentials_json: inputs.gcp_key
