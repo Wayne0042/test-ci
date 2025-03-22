@@ -17,6 +17,9 @@ jobs:
       - id: get_git_diff_base_sha
         name: Get git diff base SHA
         run: |
+          echo "GITHUB_SHA=$GITHUB_SHA"
+          echo "GITHUB_REF=$GITHUB_REF"
+          echo "GITHUB_REF_NAME=$GITHUB_REF_NAME"
           echo "GIT_MERGE_BASE_WITH_MAIN=$(git merge-base ${GITHUB_REF#refs/heads/} origin/main)"
           echo "GITHUB_EVENT_BEFORE=${{ github.event.before }}"
           echo "GITHUB_EVENT_AFTER=${{ github.event.after }}"
