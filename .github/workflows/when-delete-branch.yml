@@ -20,6 +20,8 @@ jobs:
           echo "GIT_MERGE_BASE_WITH_MAIN=$(git merge-base ${GITHUB_REF#refs/heads/} origin/main)"
           echo "GITHUB_EVENT_BEFORE=${{ github.event.before }}"
           echo "GITHUB_EVENT_AFTER=${{ github.event.after }}"
+          echo "GITHUB_EVENT_REF=${{ github.event.ref }}"
+          echo "GITHUB_EVENT_REF_TYPE=${{ github.event.ref_type }}"
 
   cleanup:
     runs-on: ubuntu-latest
