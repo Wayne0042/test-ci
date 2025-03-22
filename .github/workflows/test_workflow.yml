@@ -12,6 +12,7 @@ jobs:
         run: |
           echo "GITHUB_EVENT_HEAD=${{ github.event.head }}"
           echo "GITHUB_EVENT_AFTER=${{ github.event.after }}"
+          echo "GITHUB_SHA=$GITHUB_SHA"
 
       # - name: Set up Google Cloud Auth
       #   uses: google-github-actions/auth@v2
