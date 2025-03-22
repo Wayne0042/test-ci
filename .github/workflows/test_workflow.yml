@@ -14,7 +14,7 @@ jobs:
       #     project_id: river-surf-289011
       #     credentials_json: ${{ secrets.TEST_GCP_KEY }}
 
-      - name: Set up Google Cloud Auth
-        uses: ./.github/actions/build_env
-        with:
-          gcp_key: ${{ secrets.TEST_GCP_KEY }}
+      # - name: Set up Google Cloud Auth
+      #   uses: ./.github/actions/build_env
+      #   with:
+      #     gcp_key: ${{ secrets.TEST_GCP_KEY }}
