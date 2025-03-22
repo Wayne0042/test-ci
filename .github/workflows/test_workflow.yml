@@ -5,14 +5,23 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: print
+      - name: test tag
         run: |
-          echo "GITHUB_EVENT_HEAD=${{ github.event.head }}"
-          echo "GITHUB_EVENT_AFTER=${{ github.event.after }}"
-          echo "GITHUB_SHA=$GITHUB_SHA"
+          git tag test-2025-03-22
+          git push origin test-2025-03-22
+
+      # - name: print
+      #   run: |
+      #     echo "GITHUB_EVENT_HEAD=${{ github.event.head }}"
+      #     echo "GITHUB_EVENT_AFTER=${{ github.event.after }}"
+      #     echo "GITHUB_SHA=$GITHUB_SHA"
 
       # - name: Set up Google Cloud Auth
       #   uses: google-github-actions/auth@v2
