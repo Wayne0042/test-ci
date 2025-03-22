@@ -12,10 +12,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: test tag
-        run: |
-          git tag test-2025-03-22
-          git push origin test-2025-03-22
+      # - name: test tag
+      #   run: |
+      #     git tag test-2025-03-22
+      #     git push origin test-2025-03-22
 
       # - name: print
       #   run: |
