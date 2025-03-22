@@ -1,0 +1,31 @@
+name: Cleanup After Merge Pull Request
+
+on:
+  delete:
+    branches:
+      - '*/*'
+      - '!main'
+
+jobs:
+  generate_context_config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: get_git_diff_base_sha
+        name: Get git diff base SHA
+        run: |
+          echo "GIT_MERGE_BASE_WITH_MAIN=$(git merge-base ${GITHUB_REF#refs/heads/} origin/main)"
+          echo "GITHUB_EVENT_BEFORE=${{ github.event.before }}"
+          echo "GITHUB_EVENT_AFTER=${{ github.event.after }}"
+
+  cleanup:
+    runs-on: ubuntu-latest
+
+    needs: [generate_context_config]
+
+    steps:
+      - name: Delete
+        run: echo "delete resource"
