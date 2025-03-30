@@ -3,8 +3,13 @@ name: Release workflow
 on:
   workflow_dispatch:
     inputs:
-      rc_tag:
-        description: 'tag name'
+      commit_sha:
+        description: 'commit SHA'
+        required: true
+        type: string
+
+      release_tag:
+        description: 'release tag'
         required: true
         type: string
 
@@ -20,14 +25,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: check rc tag exist
-        run: echo "check rc tag ${{ inputs.rc_tag }} exist"
-
       - name: tag prod tag
         run: |
-          git tag prod-2025-03-22-01
-          git push origin prod-2025-03-22-01
-
-      - name: release to cloud run service
-        run: echo "release to cloud run service"
-
+          git tag ${{ input.release_tag }} ${{ inputs.commit_sha }}
+          git push origin ${{ input.release_tag }}
