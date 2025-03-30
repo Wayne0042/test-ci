@@ -21,6 +21,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # Fine-grained PAT with contents:write and workflows:write
           token: ${{ secrets.WORKFLOW_TOKEN }}
 
       - name: tag prod tag
