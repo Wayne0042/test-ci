@@ -27,5 +27,5 @@ jobs:
 
       - name: tag prod tag
         run: |
-          git tag ${{ input.release_tag }} ${{ inputs.commit_sha }}
-          git push origin ${{ input.release_tag }}
+          git tag ${{ inputs.release_tag }} ${{ inputs.commit_sha }}
+          git push origin ${{ inputs.release_tag }}
