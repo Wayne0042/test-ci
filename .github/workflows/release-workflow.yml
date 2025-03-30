@@ -17,14 +17,24 @@ jobs:
   release:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           # Fine-grained PAT with contents:write and workflows:write
-          token: ${{ secrets.WORKFLOW_TOKEN }}
+          # token: ${{ secrets.WORKFLOW_TOKEN }}
 
       - name: tag prod tag
         run: |
+          git config user.email "github-actions@github.com"
+          git config user.name "github-actions"
+          git checkout ${{ inputs.commit_sha }}
+          git switch -c temp-sync-workflow
+          git checkout main -- ./.github/workflows
+          git add ./.github/workflows
+          git commit -m "chore: sync GitHub workflow"
           git tag ${{ inputs.release_tag }} ${{ inputs.commit_sha }}
           git push origin ${{ inputs.release_tag }}
