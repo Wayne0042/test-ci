@@ -12,6 +12,12 @@ jobs:
   generate_context_config:
     runs-on: ubuntu-latest
     steps:
+      - name: Check if delete is for tag
+        if: github.event.ref_type == 'tag'
+        run: |
+          echo "Skipping because this is a tag deletion"
+          exit 0
+
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
