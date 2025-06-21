@@ -1,0 +1,17 @@
+name: development stage workflow
+
+on:
+  push:
+    branches:
+      - "*/*"
+      - "!main"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: deploy
+        run: echo "deploy success"
