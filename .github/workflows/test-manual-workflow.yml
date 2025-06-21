@@ -1,4 +1,5 @@
-name: test manual workflow ${{ inputs.branch_name }}
+name: test manual workflow
+run-name: test manual workflow ${{ inputs.branch_name }}
 
 on:
   workflow_dispatch:
