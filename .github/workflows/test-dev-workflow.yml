@@ -9,9 +9,12 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        context: [app-a, app-b]
 
     steps:
       - uses: actions/checkout@v4
 
       - id: deploy
-        run: echo "deploy success"
+        run: echo "deploy ${{ matrix.context }} success"
