@@ -1,7 +1,12 @@
-name: test manual workflow
+name: test manual workflow ${{ inputs.branch_name }}
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
+    inputs:
+      branch_name:
+        description: 'branch name'
+        required: true
+        type: string
 
 jobs:
   test:
@@ -9,6 +14,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.branch_name }}
 
-      - id: hello
-        run: echo "hello from main branch"
+      - id: deploy
+        run: echo "trigger deploy at ${{ inputs.branch_name }} branch"
